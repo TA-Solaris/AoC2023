@@ -1,0 +1,32 @@
+name: Update readme ⭐️ progress
+
+on:
+    schedule:
+        - cron: "0 * 1-26 12 *" # Every hour
+    workflow_dispatch:
+
+jobs:
+    update-readme:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+              if: ${{ env.AOC_ENABLED }}
+              env:
+                  AOC_ENABLED: ${{ secrets.AOC_ENABLED }}
+            - uses: miam-miam100/advent-readme-stars@v2
+              if: ${{ env.AOC_ENABLED }}
+              env:
+                  AOC_ENABLED: ${{ secrets.AOC_ENABLED }}
+              with:
+                  userId: ${{ secrets.AOC_USER_ID }}
+                  sessionCookie: ${{ secrets.AOC_SESSION }}
+                  year: ${{ secrets.AOC_YEAR }}
+                  solutionLocations: "d{}/d{}p2.cpp"
+                  solutionPadding: "False"
+            - uses: stefanzweifel/git-auto-commit-action@v4
+              if: ${{ env.AOC_ENABLED }}
+              env:
+                  AOC_ENABLED: ${{ secrets.AOC_ENABLED }}
+              with:
+                  commit_message: "update readme progess"
+
