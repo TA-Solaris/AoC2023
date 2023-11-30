@@ -21,7 +21,7 @@ jobs:
                   userId: ${{ secrets.AOC_USER_ID }}
                   sessionCookie: ${{ secrets.AOC_SESSION }}
                   year: ${{ secrets.AOC_YEAR }}
-                  solutionLocations: "d{}/d{}p2.cpp"
+                  solutionLocations: "d{}/d{}.cpp"
                   solutionPadding: "False"
             - uses: stefanzweifel/git-auto-commit-action@v4
               if: ${{ env.AOC_ENABLED }}
