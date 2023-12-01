@@ -3,7 +3,10 @@
 # 🎄 Advent of Code 2023
 
 <!--- advent_readme_stars table --->
+## 2023 Results
 
+| Day | Solution | Part 1 | Part 2 |
+| :---: | :---: | :---: | :---: |
 <!--- advent_readme_stars table --->
 
 ## Fun Comments
