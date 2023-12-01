@@ -7,7 +7,7 @@
 
 | Day | Solution | Part 1 | Part 2 |
 | :---: | :---: | :---: | :---: |
-| [Day 1](https://adventofcode.com/2023/day/1) |  | ⭐ |   |
+| [Day 1](https://adventofcode.com/2023/day/1) | [d1.cpp](d1/d1.cpp) | ⭐ | ⭐ |
 <!--- advent_readme_stars table --->
 
 ## Fun Comments
