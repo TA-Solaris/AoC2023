@@ -6,15 +6,6 @@
 #include <regex>
 using namespace std;
 
-string replaceAll(string str, const string& search, const string& replace) {
-    size_t pos = 0;
-    while((pos = str.find(search, pos)) != string::npos) {
-        str.replace(pos, str.length(), replace);
-        pos += replace.length();
-    }
-    return str;
-}
-
 int part1(string input) {
     // Removing letters
     char chars[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
