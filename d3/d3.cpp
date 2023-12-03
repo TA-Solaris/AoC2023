@@ -124,8 +124,56 @@ int part1(string input) {
     return total;
 }
 
+int getNumber(tuple<int, int> pos, string input) {
+    vector<tuple<int, int>> positions = getNumberPositions(input);
+    string number = "";
+    int x = get<0>(pos);
+    int y = get<1>(pos);
+    while (isElement(make_tuple(x, y), positions)) {
+        x--;
+    }
+    while (isElement(make_tuple(x + 1, y), positions)) {
+        x++;
+        number.push_back(getChar(x, y, input));
+    }
+    return stoi(number);
+}
+
 int part2(string input) {
-    return 0;
+    int total = 0;
+    vector<tuple<int, int>> numberPositions = getNumberPositions(input);
+    int y = 0;
+    stringstream ss(input);
+    string line;
+    while (getline(ss, line, '\n')) {
+        int x = 0;
+        for (auto &chr : line) {
+            vector<tuple<int, int>> gearPositions;
+            if (chr == '*') {
+                gearPositions.emplace_back(x, y);
+                gearPositions.emplace_back(x - 1, y);
+                gearPositions.emplace_back(x - 1, y - 1);
+                gearPositions.emplace_back(x - 1, y + 1);
+                gearPositions.emplace_back(x + 1, y);
+                gearPositions.emplace_back(x + 1, y - 1);
+                gearPositions.emplace_back(x + 1, y + 1);
+                gearPositions.emplace_back(x, y - 1);
+                gearPositions.emplace_back(x, y + 1);
+            }
+            vector<tuple<int, int>> gearNumberPositions;
+            for (auto pos : gearPositions) {
+                if (isElement(pos, numberPositions) && !isElement(make_tuple(get<0>(pos) - 1, get<1>(pos)), gearNumberPositions) && !isElement(make_tuple(get<0>(pos) + 1, get<1>(pos)), gearNumberPositions)) {
+                    gearNumberPositions.emplace_back(pos);
+                }
+            }
+            if (gearNumberPositions.size() == 2) {
+                total += getNumber(gearNumberPositions[0], input) * getNumber(gearNumberPositions[1], input);
+            }
+            x++;
+        }
+        y++;
+    }
+    return total;
 }
 
 string file_to_string(string filename) {
