@@ -9,6 +9,7 @@
 | :---: | :---: | :---: | :---: |
 | [Day 1](https://adventofcode.com/2023/day/1) | [d1.cpp](d1/d1.cpp) | ⭐ | ⭐ |
 | [Day 2](https://adventofcode.com/2023/day/2) | [d2.cpp](d2/d2.cpp) | ⭐ | ⭐ |
+| [Day 3](https://adventofcode.com/2023/day/3) |  | ⭐ |   |
 <!--- advent_readme_stars table --->
 
 ## Fun Comments
