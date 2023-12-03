@@ -162,7 +162,7 @@ int part2(string input) {
             }
             vector<tuple<int, int>> gearNumberPositions;
             for (auto pos : gearPositions) {
-                if (isElement(pos, numberPositions) && !isElement(make_tuple(get<0>(pos) - 1, get<1>(pos)), gearNumberPositions) && !isElement(make_tuple(get<0>(pos) + 1, get<1>(pos)), gearNumberPositions)) {
+                if (isElement(pos, numberPositions) && !isElement(make_tuple(get<0>(pos) - 1, get<1>(pos)), gearNumberPositions) && !isElement(make_tuple(get<0>(pos) + 1, get<1>(pos)), gearNumberPositions) && !isElement(make_tuple(get<0>(pos) - 2, get<1>(pos)), gearNumberPositions) && !isElement(make_tuple(get<0>(pos) + 2, get<1>(pos)), gearNumberPositions)) {
                     gearNumberPositions.emplace_back(pos);
                 }
             }
