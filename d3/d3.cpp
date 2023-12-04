@@ -150,19 +150,19 @@ int part2(string input) {
         for (auto &chr : line) {
             vector<tuple<int, int>> gearPositions;
             if (chr == '*') {
-                gearPositions.emplace_back(x, y);
+                gearPositions.emplace_back(x - 1, y + 1);
                 gearPositions.emplace_back(x - 1, y);
                 gearPositions.emplace_back(x - 1, y - 1);
-                gearPositions.emplace_back(x - 1, y + 1);
+                gearPositions.emplace_back(x, y + 1);
+                gearPositions.emplace_back(x, y);
+                gearPositions.emplace_back(x, y - 1);
+                gearPositions.emplace_back(x + 1, y + 1);
                 gearPositions.emplace_back(x + 1, y);
                 gearPositions.emplace_back(x + 1, y - 1);
-                gearPositions.emplace_back(x + 1, y + 1);
-                gearPositions.emplace_back(x, y - 1);
-                gearPositions.emplace_back(x, y + 1);
             }
             vector<tuple<int, int>> gearNumberPositions;
             for (auto pos : gearPositions) {
-                if (isElement(pos, numberPositions) && !isElement(make_tuple(get<0>(pos) - 1, get<1>(pos)), gearNumberPositions) && !isElement(make_tuple(get<0>(pos) + 1, get<1>(pos)), gearNumberPositions) && !isElement(make_tuple(get<0>(pos) - 2, get<1>(pos)), gearNumberPositions) && !isElement(make_tuple(get<0>(pos) + 2, get<1>(pos)), gearNumberPositions)) {
+                if (isElement(pos, numberPositions) && !isElement(make_tuple(get<0>(pos) - 1, get<1>(pos)), gearNumberPositions) && !isElement(make_tuple(get<0>(pos) + 1, get<1>(pos)), gearNumberPositions)) {
                     gearNumberPositions.emplace_back(pos);
                 }
             }
