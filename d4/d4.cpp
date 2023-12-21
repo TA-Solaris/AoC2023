@@ -5,6 +5,7 @@
 #include <regex>
 #include <algorithm>
 #include <cmath>
+#include <queue>
 using namespace std;
 
 vector<int> intersection(vector<int> v1, vector<int> v2){
@@ -25,6 +26,12 @@ vector<int> getNumbers(string input) {
     return numbers;
 }
 
+int evaluateCard(string card) {
+    string target = card.substr(0, card.find(" | "));
+    card.erase(card.begin(), card.begin() + card.find(" | ") + 3);
+    return intersection(getNumbers(target), getNumbers(card)).size();
+}
+
 int part1(string input) {
     // Cleaning up the input
     input = regex_replace(input, regex(" +"), " ");
@@ -36,9 +43,7 @@ int part1(string input) {
     stringstream ss(input);
     string line;
     while (getline(ss, line, '\n')) {
-        string target = line.substr(0, line.find(" | "));
-        line.erase(line.begin(), line.begin() + line.find(" | ") + 3);
-        int num = intersection(getNumbers(target), getNumbers(line)).size();
+        int num = evaluateCard(line);
         if (num != 0) total += pow(2, num - 1);
     }
 
@@ -46,7 +51,33 @@ int part1(string input) {
 }
 
 int part2(string input) {
-    return 0;
+    // Cleaning up the input
+    input = regex_replace(input, regex(" +"), " ");
+    input = regex_replace(input, regex("Card [0-9]*: "), "");
+
+    vector<string> cards;
+    stringstream ss(input);
+    string line;
+    while (getline(ss, line, '\n')) {
+        cards.emplace_back(line);
+    }
+
+    int total = 0;
+    queue<int> q;
+    for (int i = 1; i <= cards.size(); i++) {
+        q.push(i);
+    }
+    
+    for (; !q.empty(); q.pop()) {
+        int current = q.front();
+        int num = evaluateCard(cards[current - 1]);
+        for (int i = 1; i <= num; i++) {
+            q.push(current + i);
+        }
+        total++;
+    }
+
+    return total;
 }
 
 string file_to_string(string filename) {
