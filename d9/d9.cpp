@@ -38,8 +38,27 @@ int part1(string input) {
     return total;
 }
 
+int getPrevious(vector<int> seq) {
+    if(all_of(seq.cbegin(), seq.cend(), [](int i){ return i == 0; })) return 0;
+    vector<int> diffs;
+    int current = seq[0];
+    for (int i = 1; i < seq.size(); i++) {
+        diffs.emplace_back(seq[i] - current);
+        current = seq[i];
+    }
+    return seq[0] - getPrevious(diffs);
+}
+
 int part2(string input) {
-    return 0;
+    int total = 0;
+
+    stringstream ss(input);
+    string line;
+    while (getline(ss, line, '\n')) {
+        total += getPrevious(getNumbers(line));
+    }
+
+    return total;
 }
 
 string file_to_string(string filename) {
