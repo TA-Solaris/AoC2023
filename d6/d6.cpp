@@ -47,7 +47,35 @@ int part1(string input) {
 }
 
 int part2(string input) {
-    return 0;
+    // Cleaning up the input
+    input = regex_replace(input, regex(" +"), "");
+    input = regex_replace(input, regex("Time:"), "");
+    input = regex_replace(input, regex("Distance:"), "");
+
+    long int time = 0;
+    long int distance = 0;
+
+    stringstream ss(input);
+    string line;
+    while (getline(ss, line, '\n')) {
+        if (time == 0) {
+            time = stol(line);
+        } else {
+            distance = stol(line);
+        }
+    }
+
+    long int min = 0;
+    while ((time - min) * min < distance) {
+        min++;
+    }
+
+    long int max = time;
+    while ((time - max) * max < distance) {
+        max--;
+    }
+
+    return max - min + 1;
 }
 
 string file_to_string(string filename) {
