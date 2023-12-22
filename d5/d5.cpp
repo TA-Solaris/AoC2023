@@ -29,7 +29,7 @@ long int mapValue(string m, long int v) {
     return v;
 }
 
-int part1(string input) {
+long int part1(string input) {
     // Cleaning up the input
     input = regex_replace(input, regex("seeds: "), "");
     input = regex_replace(input, regex("\n\nseed-to-soil map:\n"), ":");
@@ -60,7 +60,7 @@ int part1(string input) {
     return *min_element(seeds.begin(), seeds.end());
 }
 
-int part2(string input) {
+long int part2(string input) {
     return 0;
 }
 
