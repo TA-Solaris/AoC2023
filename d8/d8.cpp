@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <map>
+#include <regex>
 using namespace std;
 
 map<string, pair<string, string>> getMap(string input) {
@@ -26,6 +27,8 @@ int part1(string input) {
     map<string, pair<string, string>> m = getMap(input);
 
     string current = "AAA";
+    if (m.find(current) == m.end()) return -1; // So that Part 2 can run
+
     int steps = 0;
     while (current != "ZZZ") {
         if (directions[steps % directions.size()] == 'L') {
@@ -39,8 +42,31 @@ int part1(string input) {
     return steps;
 }
 
+bool allFinished(vector<string> v) {
+    for (auto s : v) if (s[2] != 'Z') return false;
+    return true;
+}
+
 int part2(string input) {
-    return 0;
+    string directions = input.substr(0, input.find("\n\n"));
+    input.erase(input.begin(), input.begin() + input.find("\n\n") + 2);
+    map<string, pair<string, string>> m = getMap(input);
+
+    vector<string> current;
+    for (const auto& [key, value] : m) if (key[2] == 'A') current.emplace_back(key);
+    int steps = 0;
+    while (!allFinished(current)) {
+        vector<string> next;
+        if (directions[steps % directions.size()] == 'L') {
+            for (auto s : current) next.emplace_back(m[s].first);
+        } else {
+            for (auto s : current) next.emplace_back(m[s].second);
+        }
+        current = next;
+        steps++;
+    }
+
+    return steps;
 }
 
 string file_to_string(string filename) {
