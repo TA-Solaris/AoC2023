@@ -42,9 +42,22 @@ int part1(string input) {
     return steps;
 }
 
-bool allFinished(vector<string> v) {
-    for (auto s : v) if (s[2] != 'Z') return false;
-    return true;
+int getSteps(string current, map<string, pair<string, string>> m, string directions) {
+    int steps = 0;
+    while (current[2] != 'Z') {
+        if (directions[steps % directions.size()] == 'L') {
+            current = m[current].first;
+        } else {
+            current = m[current].second;
+        }
+        steps++;
+    }
+    return steps;
+}
+
+int gcd(int a, int b) {
+    if (b == 0) return a;
+    return gcd(b, a % b);
 }
 
 int part2(string input) {
@@ -52,21 +65,13 @@ int part2(string input) {
     input.erase(input.begin(), input.begin() + input.find("\n\n") + 2);
     map<string, pair<string, string>> m = getMap(input);
 
-    vector<string> current;
-    for (const auto& [key, value] : m) if (key[2] == 'A') current.emplace_back(key);
-    int steps = 0;
-    while (!allFinished(current)) {
-        vector<string> next;
-        if (directions[steps % directions.size()] == 'L') {
-            for (auto s : current) next.emplace_back(m[s].first);
-        } else {
-            for (auto s : current) next.emplace_back(m[s].second);
-        }
-        current = next;
-        steps++;
-    }
+    vector<int> steps;
+    for (const auto& [key, value] : m) if (key[2] == 'A') steps.emplace_back(getSteps(key, m, directions));
 
-    return steps;
+    int r = 1;
+    for (int i = 0; i < steps.size(); i++) r = (((steps[i] * r)) / (gcd(steps[i], r)));
+
+    return r;
 }
 
 string file_to_string(string filename) {
