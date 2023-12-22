@@ -13,6 +13,7 @@
 | [Day 4](https://adventofcode.com/2023/day/4) | [d4.cpp](d4/d4.cpp) | ⭐ | ⭐ |
 | [Day 5](https://adventofcode.com/2023/day/5) | [d5.cpp](d5/d5.cpp) | ⭐ |   |
 | [Day 6](https://adventofcode.com/2023/day/6) | [d6.cpp](d6/d6.cpp) | ⭐ | ⭐ |
+| [Day 8](https://adventofcode.com/2023/day/8) | [d8.cpp](d8/d8.cpp) | ⭐ |   |
 <!--- advent_readme_stars table --->
 
 ## Fun Comments
