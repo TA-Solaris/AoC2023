@@ -124,54 +124,91 @@ int part1(string input) {
     return total;
 }
 
-int getNumber(tuple<int, int> pos, string input) {
-    vector<tuple<int, int>> positions = getNumberPositions(input);
-    string number = "";
-    int x = get<0>(pos);
-    int y = get<1>(pos);
-    while (isElement(make_tuple(x, y), positions)) {
-        x--;
+vector<string> getGMap(string input) {
+    vector<string> gmap;
+    stringstream ss(input);
+    string s;
+    while (getline(ss, s, '\n')) {
+        gmap.emplace_back(s);
     }
-    while (isElement(make_tuple(x + 1, y), positions)) {
-        x++;
-        number.push_back(getChar(x, y, input));
+    return gmap;
+}
+
+vector<pair<int, int>> getGears(vector<string> gmap) {
+    vector<pair<int, int>> gears;
+    for (int y = 0; y < gmap.size(); y++) {
+        for (int x = 0; x < gmap[0].size(); x++) {
+            if (gmap[y][x] == '*') {
+                gears.emplace_back(make_pair(x, y));
+            }
+        }
     }
-    return stoi(number);
+    return gears;
+}
+
+int getNumFromPos(vector<string> gmap, pair<int, int> pos) {
+    string n;
+    bool flag = true;
+    // Move to start of num
+    while (flag) {
+        if (pos.first <= 0) {
+            flag = false;
+        } else if (strchr(numbers, gmap[pos.second][pos.first - 1]) == NULL) {
+            flag = false;
+        } else {
+            pos.first--;
+        }
+    }
+    flag = true;
+    // Read num
+    while (flag) {
+        if (pos.first >= gmap[0].size()) {
+            flag = false;
+        } else if (strchr(numbers, gmap[pos.second][pos.first]) == NULL) {
+            flag = false;
+        } else {
+            n.append(1, gmap[pos.second][pos.first]);
+            pos.first++;
+        }
+    }
+    return stoi(n);
 }
 
 int part2(string input) {
+    vector<string> gmap = getGMap(input);
+    vector<pair<int, int>> gears = getGears(gmap);
     int total = 0;
-    vector<tuple<int, int>> numberPositions = getNumberPositions(input);
-    int y = 0;
-    stringstream ss(input);
-    string line;
-    while (getline(ss, line, '\n')) {
-        int x = 0;
-        for (auto &chr : line) {
-            vector<tuple<int, int>> gearPositions;
-            if (chr == '*') {
-                gearPositions.emplace_back(x - 1, y + 1);
-                gearPositions.emplace_back(x - 1, y);
-                gearPositions.emplace_back(x - 1, y - 1);
-                gearPositions.emplace_back(x, y + 1);
-                gearPositions.emplace_back(x, y);
-                gearPositions.emplace_back(x, y - 1);
-                gearPositions.emplace_back(x + 1, y + 1);
-                gearPositions.emplace_back(x + 1, y);
-                gearPositions.emplace_back(x + 1, y - 1);
+    for (auto gear : gears) {
+        vector<pair<int, int>> ns;
+        // Left
+        if (gear.first > 0) if (strchr(numbers, gmap[gear.second][gear.first - 1]) != NULL) ns.emplace_back(make_pair(gear.first - 1, gear.second));
+        // Right
+        if (gear.first < gmap[0].size() - 1) if (strchr(numbers, gmap[gear.second][gear.first + 1]) != NULL) ns.emplace_back(make_pair(gear.first + 1, gear.second));
+        // Top
+        if (gear.second > 0) {
+            if (strchr(numbers, gmap[gear.second - 1][gear.first]) != NULL) { //Middle
+                ns.emplace_back(make_pair(gear.first, gear.second - 1));
+            } else {
+                // Left
+                if (gear.first > 0) if (strchr(numbers, gmap[gear.second - 1][gear.first - 1]) != NULL) ns.emplace_back(make_pair(gear.first - 1, gear.second - 1));
+                // Right
+                if (gear.first < gmap[0].size() - 1) if (strchr(numbers, gmap[gear.second - 1][gear.first + 1]) != NULL) ns.emplace_back(make_pair(gear.first + 1, gear.second - 1));
             }
-            vector<tuple<int, int>> gearNumberPositions;
-            for (auto pos : gearPositions) {
-                if (isElement(pos, numberPositions) && !isElement(make_tuple(get<0>(pos) - 1, get<1>(pos)), gearNumberPositions) && !isElement(make_tuple(get<0>(pos) + 1, get<1>(pos)), gearNumberPositions)) {
-                    gearNumberPositions.emplace_back(pos);
-                }
-            }
-            if (gearNumberPositions.size() == 2) {
-                total += getNumber(gearNumberPositions[0], input) * getNumber(gearNumberPositions[1], input);
-            }
-            x++;
         }
-        y++;
+        // Bottom
+        if (gear.second < gmap.size() - 1) {
+            if (strchr(numbers, gmap[gear.second + 1][gear.first]) != NULL) { //Middle
+                ns.emplace_back(make_pair(gear.first, gear.second + 1));
+            } else {
+                // Left
+                if (gear.first > 0) if (strchr(numbers, gmap[gear.second + 1][gear.first - 1]) != NULL) ns.emplace_back(make_pair(gear.first - 1, gear.second + 1));
+                // Right
+                if (gear.first < gmap[0].size() - 1) if (strchr(numbers, gmap[gear.second + 1][gear.first + 1]) != NULL) ns.emplace_back(make_pair(gear.first + 1, gear.second + 1));
+            }
+        }
+        if (ns.size() == 2) {
+            total += getNumFromPos(gmap, ns[0]) * getNumFromPos(gmap, ns[1]);
+        }
     }
     return total;
 }
