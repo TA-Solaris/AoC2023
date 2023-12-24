@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <regex>
+#include <numeric>
 using namespace std;
 
 map<string, pair<string, string>> getMap(string input) {
@@ -55,12 +56,7 @@ int getSteps(string current, map<string, pair<string, string>> m, string directi
     return steps;
 }
 
-int gcd(int a, int b) {
-    if (b == 0) return a;
-    return gcd(b, a % b);
-}
-
-int part2(string input) {
+long int part2(string input) {
     string directions = input.substr(0, input.find("\n\n"));
     input.erase(input.begin(), input.begin() + input.find("\n\n") + 2);
     map<string, pair<string, string>> m = getMap(input);
@@ -68,8 +64,8 @@ int part2(string input) {
     vector<int> steps;
     for (const auto& [key, value] : m) if (key[2] == 'A') steps.emplace_back(getSteps(key, m, directions));
 
-    int r = 1;
-    for (int i = 0; i < steps.size(); i++) r = (((steps[i] * r)) / (gcd(steps[i], r)));
+    long int r = 1;
+    for (int i = 0; i < steps.size(); i++) r = lcm(steps[i], r);
 
     return r;
 }
