@@ -16,6 +16,7 @@ int getCardValue(char c) {
 struct Hand { 
     int value;
     map<char, int> cards;
+    string cards_str;
 };
 
 bool cmp(pair<char, int>& a, pair<char, int>& b) {
@@ -35,13 +36,32 @@ bool compareHands(Hand h1, Hand h2) {
     for (const auto& [key, value] : h2.cards) h2vec.emplace_back(make_pair(key, value));
     sort(h2vec.begin(), h2vec.end(), cmp);
 
+    // First ordering
+    bool fullhouse = false;
+    char fullhousehand1;
+    char fullhousehand2;
     for (int i = 0; i < min(h1vec.size(), h2vec.size()); i++) {
-        if (h1vec[i].second > h2vec[i].second) return false;
-        if (h1vec[i].second < h2vec[i].second) return true;
-        if (h1vec[i].second == h2vec[i].second) {
-            if (getCardValue(h1vec[i].first) > getCardValue(h2vec[i].first)) return false;
-            if (getCardValue(h1vec[i].first) < getCardValue(h2vec[i].first)) return true;
+        if (fullhouse && h1vec[i].second == 2 && h2vec[i].second == 2 && (fullhousehand1 != fullhousehand2)) {
+            if (getCardValue(fullhousehand1) > getCardValue(fullhousehand2)) return false;
+            if (getCardValue(fullhousehand1) < getCardValue(fullhousehand2)) return true;
+        } else if (h1vec[i].second == 3 && h2vec[i].second == 3) {
+            fullhouse = true;
+            fullhousehand1 = h1vec[i].first;
+            fullhousehand2 = h1vec[i].first;
+        } else {
+            if (h1vec[i].second > h2vec[i].second) return false;
+            if (h1vec[i].second < h2vec[i].second) return true;
+            if (h1vec[i].second == h2vec[i].second) {
+                if (getCardValue(h1vec[i].first) > getCardValue(h2vec[i].first)) return false;
+                if (getCardValue(h1vec[i].first) < getCardValue(h2vec[i].first)) return true;
+            }
         }
+    }
+
+    // Second ordering
+    for (int i = 0; i < h1.cards_str.size(); i++) {
+        if (getCardValue(h1.cards_str[i]) > getCardValue(h2.cards_str[i])) return false;
+        if (getCardValue(h1.cards_str[i]) < getCardValue(h2.cards_str[i])) return true;
     }
 
     return false;
@@ -62,18 +82,18 @@ vector<Hand> getHands(string input) {
             }
         }
         line.erase(line.begin(), line.begin() + line.find(" ") + 1);
-        Hand hand = {stoi(line), cards};
+        Hand hand = {stoi(line), cards, cards_str};
         hands.emplace_back(hand);
     }
     return hands;
 }
 
-int part1(string input) {
+long int part1(string input) {
     vector<Hand> hands = getHands(input);
 
     sort(hands.begin(), hands.end(), compareHands);
 
-    int total = 0;
+    long int total = 0;
     for (int i = 0; i < hands.size(); i++) {
         total += (i + 1) * hands[i].value;
     }
@@ -81,7 +101,7 @@ int part1(string input) {
     return total;
 }
 
-int part2(string input) {
+long int part2(string input) {
     return 0;
 }
 
