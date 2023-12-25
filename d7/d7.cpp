@@ -36,31 +36,10 @@ bool compareHands(Hand h1, Hand h2) {
     for (const auto& [key, value] : h2.cards) h2vec.emplace_back(make_pair(key, value));
     sort(h2vec.begin(), h2vec.end(), cmp);
 
-    // First ordering (THIS IS ALL WRONG, TYPING IS FAR SIMPLER)
-    bool fullhouse = false;
-    bool twopair = false;
-    char prevcard1;
-    char prevcard2;
+    // First ordering
     for (int i = 0; i < min(h1vec.size(), h2vec.size()); i++) {
-        if ((fullhouse || twopair) && h1vec[i].second == 2 && h2vec[i].second == 2 && (prevcard1 != prevcard2)) {
-            if (getCardValue(prevcard1) > getCardValue(prevcard2)) return false;
-            if (getCardValue(prevcard1) < getCardValue(prevcard2)) return true;
-        } else if (h1vec[i].second == 3 && h2vec[i].second == 3) {
-            fullhouse = true;
-            prevcard1 = h1vec[i].first;
-            prevcard2 = h2vec[i].first;
-        } else if (h1vec[i].second == 2 && h2vec[i].second == 2 && !(fullhouse || twopair)) {
-            twopair = true;
-            prevcard1 = h1vec[i].first;
-            prevcard2 = h2vec[i].first;
-        } else {
-            if (h1vec[i].second > h2vec[i].second) return false;
-            if (h1vec[i].second < h2vec[i].second) return true;
-            if (h1vec[i].second == h2vec[i].second) {
-                if (getCardValue(h1vec[i].first) > getCardValue(h2vec[i].first)) return false;
-                if (getCardValue(h1vec[i].first) < getCardValue(h2vec[i].first)) return true;
-            }
-        }
+        if (h1vec[i].second > h2vec[i].second) return false;
+        if (h1vec[i].second < h2vec[i].second) return true;
     }
 
     // Second ordering
@@ -97,8 +76,6 @@ long int part1(string input) {
     vector<Hand> hands = getHands(input);
 
     sort(hands.begin(), hands.end(), compareHands);
-
-    for (Hand h : hands) cout << h.cards_str << " " << to_string(h.value) << endl;
 
     long int total = 0;
     for (int i = 0; i < hands.size(); i++) {
